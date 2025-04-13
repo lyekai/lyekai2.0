@@ -10,5 +10,5 @@
 
 程式語言_作業2
 
-https://colab.research.google.com/drive/1k6ZnEBrovBvZX7DTue8hZTNz_Dl1oiJj?authuser=2#scrollTo=BitBCSqcmQLl
+作業2('https://colab.research.google.com/drive/1k6ZnEBrovBvZX7DTue8hZTNz_Dl1oiJj?authuser=2#scrollTo=BitBCSqcmQLl')
 
