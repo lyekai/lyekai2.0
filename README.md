@@ -1,10 +1,16 @@
 # lyekai2.0
 裂開2.0
-期末專題提案
+資料結構期末專題提案
 
 主要: https://youtu.be/99Uw-DtclzY
 
 補充: https://youtu.be/Q6NnSiTYg2A
+
+-----
+
+程式語言期末專題提案 (這才是真連結)
+
+https://www.youtube.com/watch?v=wwY3GwaGU48
 
 -----
 
