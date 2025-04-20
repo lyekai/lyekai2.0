@@ -14,8 +14,18 @@
 https://www.youtube.com/watch?v=wwY3GwaGU48
 
 -----
+程式語言_作業1
+
+https://colab.research.google.com/drive/126DAKODU6wCD-Vdi2TnBADZjhojzs81Y?authuser=1#scrollTo=t9BlqXyWEifv
 
 程式語言_作業2
 
 https://colab.research.google.com/drive/1k6ZnEBrovBvZX7DTue8hZTNz_Dl1oiJj?authuser=2#scrollTo=BitBCSqcmQLl
 
+程式語言_作業3
+
+https://colab.research.google.com/drive/1gOCKX9fhvfMpkzeb-LynqP2qNEhRN9Tu?authuser=1#scrollTo=LIfnpdy2fBZq
+
+程式語言_作業4
+
+https://colab.research.google.com/drive/19E6Vxq1iTjOoMg-CtFs0LgrL9H0K3TDF?authuser=2#scrollTo=08fWTiSEfQ1K
