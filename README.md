@@ -7,9 +7,7 @@
 
 補充: https://youtu.be/Q6NnSiTYg2A
 
-資料結構期末專題提案(第二次)
-
-https://youtu.be/px8yiiF2cYw
+[資料結構期末專題提案(第二次)](https://youtu.be/px8yiiF2cYw)
 
 -----
 
