@@ -11,9 +11,9 @@
 
 -----
 
-程式語言期末專題提案 (這才是真連結)
+[程式語言期末專題提案 (這才是真連結)](https://www.youtube.com/watch?v=wwY3GwaGU48)
 
-https://www.youtube.com/watch?v=wwY3GwaGU48
+[程式語言期末專題提案_第二次](https://www.youtube.com/watch?v=OfcZP5Dr3d8)
 
 -----
 程式語言_作業1
