@@ -14,7 +14,7 @@
 
 ## 超大機使用說明書:
 
-1.vscode中直接執行quiz_final.py，複製terminal的連結後，進入gradio前端
+1.vscode中直接執行quiz_final.py，複製terminal輸出的連結後，進入gradio前端
 
 2.放入csv範例資料，輸入資料內任一學生姓名，設定任意主題(Ex.海綿寶寶)
 
