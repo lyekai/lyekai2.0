@@ -18,16 +18,17 @@ def get_chinese_font_file() -> str:
     return None
 
 def generate_prompt(student_name: str, theme: str, num_tf: int, num_mc: int, num_app: int) -> str:
-    return f"""你是一名資深數學老師，請根據"{student_name}"同學的答題狀況進行錯誤題目預測：
+    return f"""你是一名資深數學老師，請根據"{student_name}"同學的答題狀況與所有人的易錯題目進行錯誤題目預測：\n
 
-1. 每個欄位皆表示為一位學生在各題的答題狀況；
-2. 其中0表示該學生在該題答錯，1表示該題答對，
-3. 禁止出與數學無關的題目，不要輸出答案，
-4. 數學題目中須結合與'{theme}'相關的連貫故事
-5. 每種題型（是非題 / 選擇題 / 應用題）標題只能出現一次。
-6. 禁止出現多組題目、多份試卷、備用題或延伸題
-7. 所有題目請用繁體中文撰寫
-8. 題號後方不須空行
+1. 每個欄位皆表示為一位學生在各題的答題狀況；\n
+2. 其中0表示該學生在該題答錯，1表示該題答對，\n
+3. "題目"的欄位為該份考卷所有的題目\n
+3. 禁止出與數學無關的題目，不要輸出答案\n，
+4. 數學題目中須結合與'{theme}'相關的連貫故事\n
+5. 每種題型（是非題 / 選擇題 / 應用題）標題只能出現一次。\n
+6. 禁止出現多組題目、多份試卷、備用題或延伸題\n
+7. 所有題目請用繁體中文撰寫\n
+8. 題號後方不須空行\n
 
 請預測該學生的錯題，並生成一份包含：
 - 是非題：{num_tf} 題
@@ -105,31 +106,55 @@ def gradio_handler(csv_file, student_name, theme, num_tf, num_mc, num_app):
 def generate_feedback_handler(csv_file, student_name):
     if csv_file is not None:
         df = pd.read_csv(csv_file.name)
+
+        # 驗證是否有該學生的欄位
         if student_name not in df.columns:
             return f"找不到名字：{student_name}，請確認是否正確輸入。"
 
-        student_data = df[student_name].tolist()
-        student_summary = ', '.join([str(x) for x in student_data])
+        # 驗證是否有「題目內容」欄位
+        if "題目" not in df.columns:
+            return "CSV 中缺少「題目」欄位，無法進行錯題分析。請確認格式。"
 
-        feedback_prompt = f"""你是一名有經驗的數學老師。根據學生「{student_name}」的答題狀況（1為答對，0為答錯），請給出學習回饋與改善建議。
+        # 取得學生作答資料與題目
+        student_answers = df[student_name]
+        question_texts = df["題目"]
 
-答題紀錄如下：
-{student_summary}
+        # 篩選答錯的題目
+        wrong_questions = df[student_answers == 0][["題目"]].reset_index(drop=True)
 
-請以繁體中文提供：
-1. 學生整體表現的簡要評估
-2. 容易出錯的類型與可能原因
-3. 具體可行的學習建議（避免空泛建議）"""
+        # 若沒有錯題
+        if wrong_questions.empty:
+            return f"學生「{student_name}」在這份考卷中沒有錯題，表現非常優秀！"
 
+        # 整理錯題內容成文字
+        wrong_text = "\n".join([f"{i+1}. {q}" for i, q in enumerate(wrong_questions["題目"])])
+
+        # 準備 Prompt
+        feedback_prompt = f"""你是一名有經驗的數學老師，以下是學生「{student_name}」在數學測驗中的錯題內容：
+
+{wrong_text}
+
+請根據上述錯題，進行以下三點的分析與建議（使用繁體中文）：
+
+1. 分析這些錯題的共通點或主題（例如：應用題、單位概念、幾何圖形等）
+2. 推測可能的錯誤原因（例如：觀念不清、計算錯誤、審題不仔細）
+3. 提供具體、可執行的學習建議（例如：製作錯題本、針對類型反覆練習、使用圖像輔助理解等）
+
+請避免空泛建議，內容聚焦在學生可立即採行的學習行動。
+禁止產出與數學無關的內容，也不要寫出題目答案。
+"""
+
+        # 載入 Gemini API
         gemini_api_key = os.getenv("GEMINI_API_KEY")
         if not gemini_api_key:
-            raise ValueError("未能加载 GEMINI_API_KEY，请检查 .env 文件中的配置")
+            raise ValueError("未能加载 GEMINI_API_KEY，請檢查 .env 檔案中的設定。")
 
         model = genai.GenerativeModel('gemini-2.5-flash-preview-04-17')
         response = model.generate_content(feedback_prompt)
         return response.text.strip()
     else:
         return "請上傳包含答題資料的 CSV 檔案"
+
 
 # Gradio UI
 with gr.Blocks() as demo:
@@ -141,9 +166,9 @@ with gr.Blocks() as demo:
         theme_input = gr.Textbox(label="請輸入題目主題", value="神秘花園")
     
     with gr.Row():
-        num_tf = gr.Slider(0, 10, value=3, step=1, label="是非題數")
-        num_mc = gr.Slider(0, 10, value=4, step=1, label="選擇題數")
-        num_app = gr.Slider(0, 10, value=3, step=1, label="應用題數")
+        num_tf = gr.Slider(0, 10, value=0, step=1, label="是非題數")
+        num_mc = gr.Slider(0, 10, value=0, step=1, label="選擇題數")
+        num_app = gr.Slider(0, 10, value=0, step=1, label="應用題數")
     
     output_text = gr.Textbox(label="生成題目內容", lines=15, interactive=False)
     output_pdf = gr.File(label="下載 PDF 考卷")
