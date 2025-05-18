@@ -106,32 +106,18 @@ def gradio_handler(csv_file, student_name, theme, num_tf, num_mc, num_app):
 def generate_feedback_handler(csv_file, student_name):
     if csv_file is not None:
         df = pd.read_csv(csv_file.name)
-
-        # 驗證是否有該學生的欄位
         if student_name not in df.columns:
             return f"找不到名字：{student_name}，請確認是否正確輸入。"
-
-        # 驗證是否有「題目內容」欄位
         if "題目" not in df.columns:
             return "CSV 中缺少「題目」欄位，無法進行錯題分析。請確認格式。"
-
-        # 取得學生作答資料與題目
         student_answers = df[student_name]
         question_texts = df["題目"]
-
-        # 篩選答錯的題目
         wrong_questions = df[student_answers == 0][["題目"]].reset_index(drop=True)
-
-        # 若沒有錯題
         if wrong_questions.empty:
             return f"學生「{student_name}」在這份考卷中沒有錯題，表現非常優秀！"
-
-        # 整理錯題內容成文字
         wrong_text = "\n".join([f"{i+1}. {q}" for i, q in enumerate(wrong_questions["題目"])])
-
-        # 準備 Prompt
         feedback_prompt = f"""你是一名有經驗的數學老師，以下是學生「{student_name}」在數學測驗中的錯題內容：
-
+        
 {wrong_text}
 
 請根據上述錯題，進行以下三點的分析與建議（使用繁體中文）：
@@ -143,8 +129,6 @@ def generate_feedback_handler(csv_file, student_name):
 請避免空泛建議，內容聚焦在學生可立即採行的學習行動。
 禁止產出與數學無關的內容，也不要寫出題目答案。
 """
-
-        # 載入 Gemini API
         gemini_api_key = os.getenv("GEMINI_API_KEY")
         if not gemini_api_key:
             raise ValueError("未能加载 GEMINI_API_KEY，請檢查 .env 檔案中的設定。")
@@ -154,7 +138,6 @@ def generate_feedback_handler(csv_file, student_name):
         return response.text.strip()
     else:
         return "請上傳包含答題資料的 CSV 檔案"
-
 
 # Gradio UI
 with gr.Blocks() as demo:
