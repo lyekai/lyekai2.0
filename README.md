@@ -9,7 +9,7 @@
 
 [資料結構期末專題提案(第二次)](https://youtu.be/px8yiiF2cYw)
 
-[資料結構期末專題提案(最終版)](https://www.youtube.com/watch?v=3iLOm9bN7xA)
+[資料結構期末專題提案(最終版)]([https://www.youtube.com/watch?v=3iLOm9bN7xA](https://www.youtube.com/watch?v=wEy6uv399Aw))
 
 -----
 
