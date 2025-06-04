@@ -17,6 +17,8 @@
 
 [程式語言期末專題提案_第二次](https://www.youtube.com/watch?v=OfcZP5Dr3d8)
 
+[程式語言期末專題提案_最終版](https://www.youtube.com/watch?v=9KQw5j3sZX0)
+
 -----
 程式語言_作業1
 
